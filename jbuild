@@ -1,7 +1,0 @@
-(jbuild_version 1)
-
-(executable
- ((name main)
-  (libraries (core async async_ssl cohttp.async lambdasoup))
-  (preprocess (pps (ppx_jane)))
- ))
