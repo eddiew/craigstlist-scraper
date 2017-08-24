@@ -1,5 +1,6 @@
 open Core
 open Async
+open Cohttp
 open Cohttp_async
 open Soup.Infix
 
@@ -15,15 +16,13 @@ let base_listing_url = "https://newyork.craigslist.org"
 (* Helper shit that really ought to go into a library somewhere *)
 
 let expect_code code response =
-  if Cohttp.Code.code_of_status (Response.status response) <> code then
+  if Code.code_of_status (Response.status response) <> code then
     raise_s [%message "Expected response code" (code : int) ", got response " (response : Response.t)]
 
 let download_page url =
   let%bind response, body = Client.get (Uri.of_string url) in
   expect_code 200 response;
-  match body with
-  | `Pipe p -> Pipe.to_list p >>| String.concat
-  | x -> raise_s [%message "Received unexpected body type from cohttp: " (x : Cohttp_async.Body.t)]
+  Body.to_string body
 
 let parse_xml s =
   Markup.(string s |> parse_xml |> signals) |> Soup.from_signals
