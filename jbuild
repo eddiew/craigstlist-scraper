@@ -2,6 +2,6 @@
 
 (executable
  ((name main)
-  (libraries (core async async_ssl cohttp.async lambdasoup))
+  (libraries (core async async_ssl cohttp.async lambdasoup postgresql))
   (preprocess (pps (ppx_jane)))
  ))
